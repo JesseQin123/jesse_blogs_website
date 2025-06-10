@@ -1,84 +1,84 @@
-name: Deploy to Vercel
+# name: Deploy to Vercel
 
-on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
+# on:
+#   push:
+#     branches: [main, master]
+#   pull_request:
+#     branches: [main, master]
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
     
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.11.1
+#       - name: Setup pnpm
+#         uses: pnpm/action-setup@v4
+#         with:
+#           version: 10.11.1
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '20'
+#           cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+#       - name: Install dependencies
+#         run: pnpm install --frozen-lockfile
 
-      - name: Run tests
-        run: pnpm test
+#       - name: Run tests
+#         run: pnpm test
 
-      - name: Build project
-        run: pnpm build
-        env:
-          # Notion API configuration
-          NOTION_API_BASE_URL: ${{ secrets.NOTION_API_BASE_URL }}
+#       - name: Build project
+#         run: pnpm build
+#         env:
+#           # Notion API configuration
+#           NOTION_API_BASE_URL: ${{ secrets.NOTION_API_BASE_URL }}
           
-          # Analytics (optional)
-          NEXT_PUBLIC_FATHOM_ID: ${{ secrets.NEXT_PUBLIC_FATHOM_ID }}
-          NEXT_PUBLIC_POSTHOG_ID: ${{ secrets.NEXT_PUBLIC_POSTHOG_ID }}
+#           # Analytics (optional)
+#           NEXT_PUBLIC_FATHOM_ID: ${{ secrets.NEXT_PUBLIC_FATHOM_ID }}
+#           NEXT_PUBLIC_POSTHOG_ID: ${{ secrets.NEXT_PUBLIC_POSTHOG_ID }}
           
-          # Redis configuration (optional, only if isRedisEnabled is true)
-          REDIS_HOST: ${{ secrets.REDIS_HOST }}
-          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+#           # Redis configuration (optional, only if isRedisEnabled is true)
+#           REDIS_HOST: ${{ secrets.REDIS_HOST }}
+#           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
           
-          # Site configuration override (optional)
-          NEXT_PUBLIC_SITE_CONFIG: ${{ secrets.NEXT_PUBLIC_SITE_CONFIG }}
+#           # Site configuration override (optional)
+#           NEXT_PUBLIC_SITE_CONFIG: ${{ secrets.NEXT_PUBLIC_SITE_CONFIG }}
 
-      - name: Deploy to Vercel (Preview)
-        if: github.event_name == 'pull_request'
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: ./
-        env:
-          # Pass environment variables to Vercel
-          NOTION_API_BASE_URL: ${{ secrets.NOTION_API_BASE_URL }}
-          NEXT_PUBLIC_FATHOM_ID: ${{ secrets.NEXT_PUBLIC_FATHOM_ID }}
-          NEXT_PUBLIC_POSTHOG_ID: ${{ secrets.NEXT_PUBLIC_POSTHOG_ID }}
-          REDIS_HOST: ${{ secrets.REDIS_HOST }}
-          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-          NEXT_PUBLIC_SITE_CONFIG: ${{ secrets.NEXT_PUBLIC_SITE_CONFIG }}
+#       - name: Deploy to Vercel (Preview)
+#         if: github.event_name == 'pull_request'
+#         uses: amondnet/vercel-action@v25
+#         with:
+#           vercel-token: ${{ secrets.VERCEL_TOKEN }}
+#           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+#           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+#           working-directory: ./
+#         env:
+#           # Pass environment variables to Vercel
+#           NOTION_API_BASE_URL: ${{ secrets.NOTION_API_BASE_URL }}
+#           NEXT_PUBLIC_FATHOM_ID: ${{ secrets.NEXT_PUBLIC_FATHOM_ID }}
+#           NEXT_PUBLIC_POSTHOG_ID: ${{ secrets.NEXT_PUBLIC_POSTHOG_ID }}
+#           REDIS_HOST: ${{ secrets.REDIS_HOST }}
+#           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+#           NEXT_PUBLIC_SITE_CONFIG: ${{ secrets.NEXT_PUBLIC_SITE_CONFIG }}
 
-      - name: Deploy to Vercel (Production)
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-          working-directory: ./
-        env:
-          # Pass environment variables to Vercel
-          NOTION_API_BASE_URL: ${{ secrets.NOTION_API_BASE_URL }}
-          NEXT_PUBLIC_FATHOM_ID: ${{ secrets.NEXT_PUBLIC_FATHOM_ID }}
-          NEXT_PUBLIC_POSTHOG_ID: ${{ secrets.NEXT_PUBLIC_POSTHOG_ID }}
-          REDIS_HOST: ${{ secrets.REDIS_HOST }}
-          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-          NEXT_PUBLIC_SITE_CONFIG: ${{ secrets.NEXT_PUBLIC_SITE_CONFIG }} 
+#       - name: Deploy to Vercel (Production)
+#         if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+#         uses: amondnet/vercel-action@v25
+#         with:
+#           vercel-token: ${{ secrets.VERCEL_TOKEN }}
+#           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+#           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+#           vercel-args: '--prod'
+#           working-directory: ./
+#         env:
+#           # Pass environment variables to Vercel
+#           NOTION_API_BASE_URL: ${{ secrets.NOTION_API_BASE_URL }}
+#           NEXT_PUBLIC_FATHOM_ID: ${{ secrets.NEXT_PUBLIC_FATHOM_ID }}
+#           NEXT_PUBLIC_POSTHOG_ID: ${{ secrets.NEXT_PUBLIC_POSTHOG_ID }}
+#           REDIS_HOST: ${{ secrets.REDIS_HOST }}
+#           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+#           NEXT_PUBLIC_SITE_CONFIG: ${{ secrets.NEXT_PUBLIC_SITE_CONFIG }} 
