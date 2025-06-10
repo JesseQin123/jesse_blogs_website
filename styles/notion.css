@@ -473,10 +473,14 @@
 
 /* Mobile header optimizations */
 @media only screen and (max-width: 768px) {
+  .notion-header {
+    overflow: visible;
+  }
+  
   .notion-header .notion-nav-header {
     padding: 0.5rem 1rem;
     flex-wrap: nowrap;
-    overflow-x: visible;
+    overflow: visible;
   }
   
   .notion-nav-header-rhs {
