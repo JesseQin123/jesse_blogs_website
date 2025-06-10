@@ -1,4 +1,6 @@
 import type * as types from 'notion-types'
+import { IoClose } from '@react-icons/all-files/io5/IoClose'
+import { IoMenu } from '@react-icons/all-files/io5/IoMenu'
 import { IoMoonSharp } from '@react-icons/all-files/io5/IoMoonSharp'
 import { IoSunnyOutline } from '@react-icons/all-files/io5/IoSunnyOutline'
 import cs from 'classnames'
@@ -32,6 +34,86 @@ function ToggleThemeButton() {
   )
 }
 
+function MobileNavigation({ block }: { block: types.CollectionViewPageBlock | types.PageBlock }) {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+  const { components, mapPageUrl } = useNotionContext()
+  const dropdownRef = React.useRef<HTMLDivElement>(null)
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  const closeMenu = () => setIsMenuOpen(false)
+
+  // Close menu when clicking outside
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        closeMenu()
+      }
+    }
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside)
+      }
+    }
+  }, [isMenuOpen])
+
+  return (
+    <div className={styles.mobileNav} ref={dropdownRef}>
+      <button 
+        className={styles.hamburgerButton}
+        onClick={toggleMenu}
+        aria-label="Toggle navigation menu"
+      >
+        {isMenuOpen ? <IoClose /> : <IoMenu />}
+      </button>
+
+      {isMenuOpen && (
+        <div className={styles.mobileDropdown}>
+          {navigationLinks?.map((link, index) => {
+            if (!link?.pageId && !link?.url) {
+              return null
+            }
+
+            if (link.pageId) {
+              return (
+                <components.PageLink
+                  href={mapPageUrl(link.pageId)}
+                  key={index}
+                  className={styles.mobileNavLink}
+                  onClick={closeMenu}
+                >
+                  {link.title}
+                </components.PageLink>
+              )
+            } else {
+              return (
+                <components.Link
+                  href={link.url}
+                  key={index}
+                  className={styles.mobileNavLink}
+                  onClick={closeMenu}
+                >
+                  {link.title}
+                </components.Link>
+              )
+            }
+          }).filter(Boolean)}
+          
+          <div className={styles.mobileNavActions}>
+            <ToggleThemeButton />
+            {isSearchEnabled && (
+              <div className={styles.mobileSearch}>
+                <Search block={block} title={null} />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function NotionPageHeader({
   block
 }: {
@@ -48,7 +130,8 @@ export function NotionPageHeader({
       <div className='notion-nav-header'>
         <Breadcrumbs block={block} rootOnly={true} />
 
-        <div className='notion-nav-header-rhs breadcrumbs'>
+        {/* Desktop Navigation */}
+        <div className={cs('notion-nav-header-rhs breadcrumbs', styles.desktopNav)}>
           {navigationLinks
             ?.map((link, index) => {
               if (!link?.pageId && !link?.url) {
@@ -83,6 +166,9 @@ export function NotionPageHeader({
 
           {isSearchEnabled && <Search block={block} title={null} />}
         </div>
+
+        {/* Mobile Navigation */}
+        <MobileNavigation block={block} />
       </div>
     </header>
   )

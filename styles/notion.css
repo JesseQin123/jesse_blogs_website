@@ -62,6 +62,7 @@
   max-width: 1100px;
   margin: 0 auto;
   overflow-x: auto;
+  padding: 0 1rem;
 }
 
 .notion-nav-header-rhs {
@@ -468,4 +469,28 @@
 
 .notion-equation.notion-equation-block{
   align-items: center;
+}
+
+/* Mobile header optimizations */
+@media only screen and (max-width: 768px) {
+  .notion-header .notion-nav-header {
+    padding: 0.5rem 1rem;
+    flex-wrap: nowrap;
+    overflow-x: visible;
+  }
+  
+  .notion-nav-header-rhs {
+    gap: 0.25rem;
+  }
+  
+  /* Hide breadcrumb text on mobile, keep only home icon */
+  .notion-breadcrumb .notion-page-title-text {
+    display: none;
+  }
+  
+  /* Ensure search doesn't take too much space */
+  .notion-search {
+    max-width: none;
+    flex: 1;
+  }
 }
