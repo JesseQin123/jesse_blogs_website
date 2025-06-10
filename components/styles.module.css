@@ -243,6 +243,14 @@
   color: var(--fg-color-icon);
 }
 
+:global(.dark-mode) .hamburgerButton {
+  color: var(--fg-color);
+}
+
+:global(.dark-mode) .hamburgerButton:hover {
+  color: var(--fg-color-icon);
+}
+
 .mobileDropdown {
   position: absolute;
   top: 100%;
@@ -258,6 +266,7 @@
 }
 
 :global(.dark-mode) .mobileDropdown {
+  background: var(--bg-color);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border-color: var(--fg-color-1);
 }
@@ -280,6 +289,16 @@
   color: var(--fg-color);
 }
 
+:global(.dark-mode) .mobileNavLink {
+  color: var(--fg-color);
+  border-bottom-color: var(--fg-color-0);
+}
+
+:global(.dark-mode) .mobileNavLink:hover {
+  background-color: var(--bg-color-1);
+  color: var(--fg-color);
+}
+
 .mobileNavActions {
   display: flex;
   align-items: center;
@@ -287,6 +306,10 @@
   padding: 0.5rem 1rem;
   border-top: 1px solid var(--fg-color-0);
   margin-top: 0.5rem;
+}
+
+:global(.dark-mode) .mobileNavActions {
+  border-top-color: var(--fg-color-0);
 }
 
 .mobileSearch {

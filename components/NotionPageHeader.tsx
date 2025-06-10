@@ -39,10 +39,7 @@ function MobileNavigation({ block }: { block: types.CollectionViewPageBlock | ty
   const { components, mapPageUrl } = useNotionContext()
   const dropdownRef = React.useRef<HTMLDivElement>(null)
 
-  const toggleMenu = () => {
-    console.log('Toggle menu clicked, current state:', isMenuOpen)
-    setIsMenuOpen(!isMenuOpen)
-  }
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const closeMenu = () => setIsMenuOpen(false)
 
   // Close menu when clicking outside
@@ -61,8 +58,6 @@ function MobileNavigation({ block }: { block: types.CollectionViewPageBlock | ty
     }
   }, [isMenuOpen])
 
-  console.log('MobileNavigation render - isMenuOpen:', isMenuOpen, 'navigationLinks:', navigationLinks)
-
   return (
     <div className={styles.mobileNav} ref={dropdownRef}>
       <button 
@@ -74,23 +69,7 @@ function MobileNavigation({ block }: { block: types.CollectionViewPageBlock | ty
       </button>
 
       {isMenuOpen && (
-        <div 
-          className={styles.mobileDropdown}
-          style={{
-            display: 'block',
-            position: 'absolute',
-            top: '100%',
-            right: 0,
-            background: 'white',
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-            minWidth: '200px',
-            zIndex: 9999,
-            padding: '0.5rem 0',
-            marginTop: '0.5rem'
-          }}
-        >
+        <div className={styles.mobileDropdown}>
           {navigationLinks?.map((link, index) => {
             if (!link?.pageId && !link?.url) {
               return null
