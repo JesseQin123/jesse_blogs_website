@@ -10,7 +10,7 @@ export default siteConfig({
 
   // basic site info (required)
   name: 'Jesse Qin\'s Blogs',
-  domain: 'nextjs-notion-starter-kit.transitivebullsh.it',
+  domain: 'jesseqin.me',
   author: 'Jesse Qin',
 
   // open graph metadata (optional)
@@ -56,10 +56,6 @@ export default siteConfig({
     {
       title: 'Blogs',
       pageId: '1cad70bfc05f8151bf44ddc6991d2d57'
-    },
-    {
-      title: 'Projects',
-      pageId: '1d2d70bfc05f8067abbae56b37288336'
     },
     {
       title: 'Readings',

@@ -1,6 +1,9 @@
 {
-  "name": "Next.js Notion Starter Kit",
-  "short_name": "Starter Kit",
+  "name": "Jesse Qin's Blogs",
+  "short_name": "Jesse's Blogs",
+  "description": "Welcome to my blogs!",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/favicon.png",
@@ -18,7 +21,9 @@
       "sizes": "192x192"
     }
   ],
-  "theme_color": "#000000",
-  "background_color": "#000000",
-  "display": "standalone"
+  "theme_color": "#fefffe",
+  "background_color": "#fefffe",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "categories": ["blog", "personal", "technology"]
 }

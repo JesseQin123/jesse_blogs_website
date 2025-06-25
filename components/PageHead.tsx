@@ -24,6 +24,30 @@ export function PageHead({
 
   const socialImageUrl = getSocialImageUrl(pageId) || image
 
+  // Generate structured data
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Website',
+    name: site?.name || config.name,
+    description: description || config.description,
+    url: config.host,
+    author: {
+      '@type': 'Person',
+      name: config.author,
+      ...(config.twitter && { url: `https://twitter.com/${config.twitter}` })
+    },
+    publisher: {
+      '@type': 'Person',
+      name: config.author
+    },
+    ...(socialImageUrl && { image: socialImageUrl }),
+    inLanguage: config.language || 'en',
+    copyrightHolder: {
+      '@type': 'Person',
+      name: config.author
+    }
+  }
+
   return (
     <Head>
       <meta charSet='utf-8' />
@@ -50,7 +74,17 @@ export function PageHead({
       />
 
       <meta name='robots' content='index,follow' />
+      <meta name='author' content={config.author} />
+      <meta name='language' content={config.language || 'en'} />
       <meta property='og:type' content='website' />
+
+      {/* Add structured data */}
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData)
+        }}
+      />
 
       {site && (
         <>
@@ -76,6 +110,7 @@ export function PageHead({
           <meta name='twitter:card' content='summary_large_image' />
           <meta name='twitter:image' content={socialImageUrl} />
           <meta property='og:image' content={socialImageUrl} />
+          <meta property='og:image:alt' content={title || 'Blog image'} />
         </>
       ) : (
         <meta name='twitter:card' content='summary' />
@@ -95,6 +130,8 @@ export function PageHead({
         href={rssFeedUrl}
         title={site?.name}
       />
+
+      <link rel='manifest' href='/manifest.json' />
 
       <meta property='og:title' content={title} />
       <meta name='twitter:title' content={title} />

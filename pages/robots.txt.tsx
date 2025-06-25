@@ -18,13 +18,27 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   res.setHeader('Cache-Control', 'public, max-age=86400, immutable')
   res.setHeader('Content-Type', 'text/plain')
 
-  // only allow the site to be crawlable on the production deployment
-  if (process.env.VERCEL_ENV === 'production') {
+  // Allow crawling in production or if explicitly enabled
+  const isProduction = process.env.VERCEL_ENV === 'production' || process.env.NODE_ENV === 'production'
+  const allowCrawling = isProduction || process.env.ALLOW_CRAWLING === 'true'
+
+  if (allowCrawling) {
     res.write(`User-agent: *
 Allow: /
-Disallow: /api/get-tweet-ast/*
-Disallow: /api/search-notion
 
+# Disallow API routes and sensitive paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /404
+Disallow: /500
+
+# Allow specific API endpoints that should be crawlable
+Allow: /api/social-image
+
+# Crawl delay to be respectful to server
+Crawl-delay: 1
+
+# Sitemap location
 Sitemap: ${host}/sitemap.xml
 `)
   } else {
